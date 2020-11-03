@@ -1,3 +1,11 @@
+properties([
+
+	parameters ([
+		string (defaultValue: '', description: 'Enter the Docker Image Name', name: 'Image_name', trim: false),
+	])
+])
+
+
 pipeline {
 	agent {label 'master'}
 	
@@ -40,6 +48,28 @@ pipeline {
 					ls
 
 					cat Dockerfile
+				'''
+			} // Steps Completed
+		}  // Stage Completed
+
+
+		stage('Docker Build Image'){
+			steps {
+				
+				sh'''
+					echo 'Build Image'
+					
+					docker build -t $Image_name .
+				'''
+			} // Steps Completed
+		}  // Stage Completed
+
+		stage('Image Creation Status'){
+			steps {
+				
+				sh'''
+									
+					docker images
 				'''
 			} // Steps Completed
 		}  // Stage Completed
