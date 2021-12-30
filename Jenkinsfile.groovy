@@ -59,7 +59,7 @@ pipeline {
 				sh'''
 					echo 'Build Image'
 					
-					// docker build -t test_img .
+					
 				'''
 			} // Steps Completed
 		}  // Stage Completed
