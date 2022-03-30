@@ -14,7 +14,7 @@ pipeline {
 					
 					sshagent(['docker_login_repeat']) {
 						 
-						 sh 'ssh -o StrictHostKeyChecking=no ${hostname} sudo yum install git -y'
+						 sh 'ssh -o StrictHostKeyChecking=no ${hostname} sudo apt-get install git -y'
 						 sh 'ssh -o StrictHostKeyChecking=no ${hostname} sudo git clone https://github.com/hariharanjenkin/docker.git'
 						 
 				
