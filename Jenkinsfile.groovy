@@ -43,7 +43,7 @@ pipeline {
 					
 					sshagent(['docker_login_repeat']) {
 						 
-						 
+						 sh 'ssh -o StrictHostKeyChecking=no ${hostname} sudo su'
 						 sh 'ssh -o StrictHostKeyChecking=no ${hostname} sudo kubectl apply -f /home/ubuntu/docker/K8S_Deployments/deployment.yml'
 						 
 					}		  
@@ -57,7 +57,7 @@ pipeline {
 					
 					sshagent(['docker_login_repeat']) {
 						 
-						 
+						 sh 'ssh -o StrictHostKeyChecking=no ${hostname} sudo su'
 						 sh 'ssh -o StrictHostKeyChecking=no ${hostname} sudo kubectl apply -f /home/ubuntu/docker/K8S_Deployments/service.yml'
 						 
 					}		  
