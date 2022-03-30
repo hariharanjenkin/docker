@@ -1,77 +1,67 @@
-properties([
-
-	parameters ([
-		string (defaultValue: '', description: 'Enter the Docker Image Name', name: 'Image_name', trim: false),
-	])
-])
-
-
 pipeline {
-	agent {label 'master'}
-	
-	stages {
-		stage('CLEAN WORKSPACE IN JENKINS SERVER'){
-			steps {
-				cleanWs()
-			} // Steps Completed	
-		}  // Stage Completed
-	
-
-		stage('CLONE THE SOURCE CODE FROM GIT-HUB'){
-			steps {
-				echo 'In SCM Stage'
-				
-				git credentialsId: 'c8300171-d7b3-452e-a384-893f10299ad5', url: 'https://github.com/hariharanjenkin/docker.git',branch: 'main'
-
-
-			} // Steps Completed
-		}  // Stage Completed	
-
-
-		stage('Restarting Docker Service Status'){
-			steps {
-				
-				sh'''
-					systemctl start docker
+	agent {label 'master'} //where we are executing this script
+		
+		stages {
+			stage('Cleanws') {
+				steps {
+					 cleanWs()
+					}
+			}
+		
+			
+			stage('Clone Your Source Code from GitHub') {
+				steps {
 					
-				'''
-			} // Steps Completed
-		}  // Stage Completed
-
-		stage('Verifiying the Dockerfile'){
-			steps {
+					sshagent(['docker_login_repeat']) {
+						 
+						 sh 'ssh -o StrictHostKeyChecking=no ${hostname} sudo yum install git -y'
+						 sh 'ssh -o StrictHostKeyChecking=no ${hostname} sudo git clone https://github.com/hariharanjenkin/docker.git'
+						 
 				
-				sh'''
-					echo 'Docker file verification'
+					}		  
+				}
+			}
+			
+			
+			stage('Local Profile Creation') {
+				steps {
 					
-					pwd
-					ls
-
-					cat Dockerfile
-				'''
-			} // Steps Completed
-		}  // Stage Completed
-
-
-		stage('Docker Build Image'){
-			steps {
-				
-				sh'''
-					echo 'Build Image'
+					sshagent(['docker_login_repeat']) {
+						 
+						 
+						 sh 'ssh -o StrictHostKeyChecking=no ${hostname} sudo su'
+						 sh 'ssh -o StrictHostKeyChecking=no ${hostname} sudo aws eks update-kubeconfig --name hr-cluster --region=eu-central-1'
+						 
+					}		  
+				}
+			}
+			
+			
+			stage('Trigger the Deployment POD') {
+				steps {
 					
+					sshagent(['docker_login_repeat']) {
+						 
+						 
+						 sh 'ssh -o StrictHostKeyChecking=no ${hostname} sudo kubectl apply -f /home/ubuntu/docker/K8S_Deployments/deployment.yml'
+						 
+					}		  
+				}
+			}
+			
+			
+			
+			stage('Build the Services') {
+				steps {
 					
-				'''
-			} // Steps Completed
-		}  // Stage Completed
-
-		stage('Image Creation Status'){
-			steps {
-				
-				sh'''
-									
-					docker images
-				'''
-			} // Steps Completed
-		}  // Stage Completed
-	}
-}
+					sshagent(['docker_login_repeat']) {
+						 
+						 
+						 sh 'ssh -o StrictHostKeyChecking=no ${hostname} sudo kubectl apply -f /home/ubuntu/docker/K8S_Deployments/service.yml'
+						 
+					}		  
+				}
+			}
+			
+		}
+}		
