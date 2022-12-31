@@ -1,6 +1,6 @@
-FROM centos:7
+FROM ubuntu
 MAINTAINER Hitech
-RUN yum -y install httpd
+RUN apt update && apt-get install nginx -y
 COPY index.html /var/www/html/
 CMD [“/usr/sbin/httpd”, “-D”, “FOREGROUND”]
 EXPOSE 80
