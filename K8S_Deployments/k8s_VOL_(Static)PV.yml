@@ -1,0 +1,13 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: static-pv
+spec:
+  storageClassName: static-pv-01
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  awsElasticBlockStore: 
+    fsType: ext4 
+    volumeID: vol-f37a03aa

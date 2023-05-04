@@ -1,0 +1,28 @@
+#Code-Server-Deployment.yml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+name: codeserver-ecr
+labels:
+   app: codeserver-ecr
+spec:
+replicas: 1
+selector:
+   matchLabels:
+      app: codeserver-ecr
+template:
+   metadata:
+      labels:
+      app: codeserver-ecr
+   spec:
+      containers:
+      - name: codeserver-ecr
+        image: public.ecr.aws/v3m8j3r5/testf:latest
+        imagePullPolicy: Never
+        resources:
+         requests:
+           cpu: 100m
+        command: ["/bin/sh"]
+        args: ["-c", "while true; do echo hello; sleep 10;done"]
+        ports:
+           - containerPort: 8080

@@ -1,0 +1,21 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: cluster-with-existing-vpc
+  region: ap-south-1
+vpc:
+  subnets:
+    public:
+      ap-south-1a: { id: subnet-0a558c91f8a19f746 }
+      ap-south-1b: { id: subnet-093fe85002e8df7ba }
+nodeGroups:
+  - name: node-1-app-1
+    instanceType: t2.medium
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 4
+  - name: node-2-app-2
+    instanceType: t2.medium
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 4

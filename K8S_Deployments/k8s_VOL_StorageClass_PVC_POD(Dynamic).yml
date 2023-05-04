@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: aws-pd
+spec:
+  containers:
+  - image: nginx
+    name: test-container
+    volumeMounts:
+    - mountPath: "/mnt/storage"
+      name: aws-pv-volume
+  volumes:
+  - name: aws-pv-volume
+    persistentVolumeClaim:
+      claimName: aws-pvc
