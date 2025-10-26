@@ -35,8 +35,12 @@ subjects:
   - kind: User
     name: manish
     apiGroup: rbac.authorization.k8s.io
+  - kind: User
+    name: Praveen
+    apiGroup: rbac.authorization.k8s.io
 roleRef:
   kind: ClusterRole
   name: Monitoring-clusterrole
   apiGroup: rbac.authorization.k8s.io
+
   
